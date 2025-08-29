@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-// PRODUCTS array (use your full array here)
+// PRODUCTS array (complete as provided)
 const PRODUCTS = [
   {
     id: 1,
@@ -30,7 +30,7 @@ const PRODUCTS = [
       },
     ],
   },
-     { 
+  { 
     id: 9, 
     name: 'Elegant Satin Dress', 
     price: 9200, 
@@ -176,7 +176,7 @@ const PRODUCTS = [
       { id: 1, user: "Ethan L.", rating: 5, comment: "Most comfortable sneakers I've ever owned.", date: "2023-10-22" },
       { id: 2, user: "Liam W.", rating: 4, comment: "Great for everyday wear, good arch support.", date: "2023-10-10" }
     ]
-  },// ... include all the other products exactly as in your array ...
+  },
 ];
 
 // Checkout Steps
@@ -645,6 +645,7 @@ export default function App() {
   const [products, setProducts] = useState(PRODUCTS);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSizeSelection = (productId, size) => {
     setSelectedSizes((prev) => ({
@@ -843,9 +844,7 @@ export default function App() {
   return (
     <div className="app-container">
       <style jsx>{`
-        /* Your full CSS from your original file including header, grid, modals, etc. */
-        /* For brevity, please insert your full CSS here exactly as you have it */
- @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap');
 
         :root {
             --primary-color: #0b0101ff;
@@ -872,7 +871,6 @@ export default function App() {
         }
         /* Header */
         .header {
-        
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -885,6 +883,13 @@ export default function App() {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary-color);
+        }
+        .header-right {
+          display: flex;
+          align-items: center;
+        }
+        .nav-links-container {
+          display: block;
         }
         .nav-links {
             list-style: none;
@@ -957,6 +962,14 @@ export default function App() {
         .user-dropdown button:hover {
             background: #f5f5f5;
         }
+        .hamburger {
+          display: none;
+          background: none;
+          border: none;
+          font-size: 2rem;
+          cursor: pointer;
+          margin-left: 1rem;
+        }
 
         /* Auth Modal */
         .auth-modal {
@@ -995,6 +1008,7 @@ export default function App() {
             justify-content: center;
             margin: 1rem 0 2rem;
             gap: 1rem;
+            flex-wrap: wrap;
         }
         .category-btn {
             background: white;
@@ -1791,21 +1805,35 @@ export default function App() {
             padding-top: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
-        /* Mobile Responsive CSS (add at bottom of your CSS) */
+        /* Mobile Responsive CSS */
         @media screen and (max-width: 768px) {
           .header {
-            flex-direction: column;
-            align-items: flex-start;
             padding: 1rem 1.5rem;
+          }
+          .hamburger {
+            display: block;
+          }
+          .nav-links-container {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #f9c5feff;
+            z-index: 100;
+          }
+          .nav-links-container.open {
+            display: block;
           }
           .nav-links {
             flex-direction: column;
-            width: 100%;
-            margin-top: 1rem;
+            align-items: center;
+            padding: 1rem;
+            margin: 0;
           }
           .nav-links li {
             margin-left: 0;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
           }
           .container {
             padding: 0 1rem;
@@ -1842,57 +1870,67 @@ export default function App() {
             gap: 1rem;
             font-size: 1.2rem;
           }
+          .payment-options {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
 
       {/* Header */}
       <header className="header">
         <div className="logo">D&amp;J Boutique</div>
-        <nav>
+        <div className="header-right">
+          <div className="header-icons">
+            {currentUser ? (
+              <div className="user-container user-menu">
+                <div>{currentUser.name}</div>
+                <div className="user-dropdown">
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              </div>
+            ) : (
+              <div className="user-container" onClick={() => setIsAuthModalOpen(true)}>
+                Login
+              </div>
+            )}
+            <div className="wishlist-container" onClick={() => setIsWishlistOpen(true)}>
+              ❤️
+              {wishlist.length > 0 && (
+                <span className="wishlist-count">{wishlist.length}</span>
+              )}
+            </div>
+            <div className="cart-container" onClick={() => setIsCartOpen(true)}>
+              🛒
+              {cartTotalItems > 0 && <span className="cart-count">{cartTotalItems}</span>}
+            </div>
+          </div>
+          <button className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            ☰
+          </button>
+        </div>
+        <div className={`nav-links-container ${isMenuOpen ? 'open' : ''}`}>
           <ul className="nav-links">
             <li>
-              <a href="#dresses" onClick={() => setActiveCategory("dresses")}>
+              <a href="#dresses" onClick={() => { setActiveCategory("dresses"); setIsMenuOpen(false); }}>
                 Dresses
               </a>
             </li>
             <li>
-              <a href="#shoes" onClick={() => setActiveCategory("shoes")}>
+              <a href="#shoes" onClick={() => { setActiveCategory("shoes"); setIsMenuOpen(false); }}>
                 Shoes
               </a>
             </li>
             <li>
-              <a href="#new-arrivals" onClick={() => setActiveCategory("all")}>
+              <a href="#new-arrivals" onClick={() => { setActiveCategory("all"); setIsMenuOpen(false); }}>
                 New Arrivals
               </a>
             </li>
             <li>
-              <a href="#contact">Contact</a>
+              <a href="#contact" onClick={() => setIsMenuOpen(false)}>
+                Contact
+              </a>
             </li>
           </ul>
-        </nav>
-        <div className="header-icons">
-          {currentUser ? (
-            <div className="user-container user-menu">
-              <div>{currentUser.name}</div>
-              <div className="user-dropdown">
-                <button onClick={handleLogout}>Logout</button>
-              </div>
-            </div>
-          ) : (
-            <div className="user-container" onClick={() => setIsAuthModalOpen(true)}>
-              Login
-            </div>
-          )}
-          <div className="wishlist-container" onClick={() => setIsWishlistOpen(true)}>
-            ❤️
-            {wishlist.length > 0 && (
-              <span className="wishlist-count">{wishlist.length}</span>
-            )}
-          </div>
-          <div className="cart-container" onClick={() => setIsCartOpen(true)}>
-            🛒
-            {cartTotalItems > 0 && <span className="cart-count">{cartTotalItems}</span>}
-          </div>
         </div>
       </header>
 
@@ -2089,8 +2127,8 @@ export default function App() {
 
       {/* Cart Sidebar & Checkout */}
       {isCartOpen && (
-        <div className="cart-overlay">
-          <div className="cart-sidebar">
+        <div className="cart-overlay" onClick={() => setIsCartOpen(false)}>
+          <div className="cart-sidebar" onClick={(e) => e.stopPropagation()}>
             <div className="cart-header">
               <h2>
                 {checkoutStep === CHECKOUT_STEPS.CART && "Your Cart"}
@@ -2350,8 +2388,8 @@ export default function App() {
 
       {/* Wishlist Sidebar */}
       {isWishlistOpen && (
-        <div className="wishlist-overlay">
-          <div className="wishlist-sidebar">
+        <div className="wishlist-overlay" onClick={() => setIsWishlistOpen(false)}>
+          <div className="wishlist-sidebar" onClick={(e) => e.stopPropagation()}>
             <div className="wishlist-header">
               <h2>Your Wishlist</h2>
               <button onClick={() => setIsWishlistOpen(false)}>&times;</button>
@@ -2453,7 +2491,7 @@ export default function App() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2025 D&amp;J Boutique. All rights reserved.</p>
+          <p>© 2025 D&J Boutique. All rights reserved.</p>
         </div>
       </footer>
     </div>
