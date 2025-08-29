@@ -1,23 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-// Updated PRODUCTS array with additional similar products
+// PRODUCTS array (use your full array here)
 const PRODUCTS = [
-  { 
-    id: 1, 
-    name: 'Elegant Satin Dress', 
-    price: 8999, 
+  {
+    id: 1,
+    name: "Elegant Satin Dress",
+    price: 8999,
     originalPrice: 11999,
-    image: 'https://tse1.mm.bing.net/th/id/OIP.Bs7dX9opDQnGhzMNCUaTsgHaLG?r=0&cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3', 
-    category: 'dresses', 
-    sizes: ['S', 'M', 'L', 'XL'], 
-    stock: { 'S': 2, 'M': 5, 'L': 3, 'XL': 0 },
-    color: 'Navy Blue',
+    image:
+      "https://tse1.mm.bing.net/th/id/OIP.Bs7dX9opDQnGhzMNCUaTsgHaLG?r=0&cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3",
+    category: "dresses",
+    sizes: ["S", "M", "L", "XL"],
+    stock: { S: 2, M: 5, L: 3, XL: 0 },
+    color: "Navy Blue",
     reviews: [
-      { id: 1, user: "Sophia R.", rating: 5, comment: "Absolutely love this dress! Perfect for weddings.", date: "2023-10-15" },
-      { id: 2, user: "Emma L.", rating: 4, comment: "Beautiful fabric but runs a bit small.", date: "2023-09-22" }
-    ]
+      {
+        id: 1,
+        user: "Sophia R.",
+        rating: 5,
+        comment: "Absolutely love this dress! Perfect for weddings.",
+        date: "2023-10-15",
+      },
+      {
+        id: 2,
+        user: "Emma L.",
+        rating: 4,
+        comment: "Beautiful fabric but runs a bit small.",
+        date: "2023-09-22",
+      },
+    ],
   },
-   { 
+     { 
     id: 9, 
     name: 'Elegant Satin Dress', 
     price: 9200, 
@@ -163,22 +176,20 @@ const PRODUCTS = [
       { id: 1, user: "Ethan L.", rating: 5, comment: "Most comfortable sneakers I've ever owned.", date: "2023-10-22" },
       { id: 2, user: "Liam W.", rating: 4, comment: "Great for everyday wear, good arch support.", date: "2023-10-10" }
     ]
-  },
-
-  
+  },// ... include all the other products exactly as in your array ...
 ];
 
 // Checkout Steps
 const CHECKOUT_STEPS = {
-  CART: 'cart',
-  SHIPPING: 'shipping',
-  PAYMENT: 'payment',
-  CONFIRMATION: 'confirmation'
+  CART: "cart",
+  SHIPPING: "shipping",
+  PAYMENT: "payment",
+  CONFIRMATION: "confirmation",
 };
 
 // Format price in Indian rupees
 const formatPrice = (price) => {
-  return `₹${price.toLocaleString('en-IN')}`;
+  return `₹${price.toLocaleString("en-IN")}`;
 };
 
 // Calculate discount percentage
@@ -187,19 +198,21 @@ const calculateDiscount = (originalPrice, salePrice) => {
 };
 
 // Star rating component
-const StarRating = ({ rating, onChange, editable = false, size = 'medium' }) => {
-  const starSize = size === 'large' ? '28px' : '18px';
-  
+const StarRating = ({ rating, onChange, editable = false, size = "medium" }) => {
+  const starSize = size === "large" ? "28px" : "18px";
+
   return (
     <div className="star-rating">
       {[1, 2, 3, 4, 5].map((star) => (
         <span
           key={star}
-          className={`star ${editable ? 'editable' : ''} ${star <= rating ? 'filled' : ''}`}
+          className={`star ${editable ? "editable" : ""} ${
+            star <= rating ? "filled" : ""
+          }`}
           onClick={() => editable && onChange(star)}
-          style={{ fontSize: starSize, cursor: editable ? 'pointer' : 'default' }}
+          style={{ fontSize: starSize, cursor: editable ? "pointer" : "default" }}
         >
-          {star <= rating ? '★' : '☆'}
+          {star <= rating ? "★" : "☆"}
         </span>
       ))}
       <style jsx>{`
@@ -212,7 +225,7 @@ const StarRating = ({ rating, onChange, editable = false, size = 'medium' }) => 
           margin-right: 2px;
         }
         .star.filled {
-          color: #FFD700;
+          color: #ffd700;
         }
         .star.editable:hover {
           transform: scale(1.2);
@@ -225,27 +238,27 @@ const StarRating = ({ rating, onChange, editable = false, size = 'medium' }) => 
 // Review Form Component
 const ReviewForm = ({ product, onSubmit }) => {
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [user, setUser] = useState('');
+  const [comment, setComment] = useState("");
+  const [user, setUser] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (rating === 0) {
-      alert('Please select a rating');
+      alert("Please select a rating");
       return;
     }
-    
+
     onSubmit({
       id: Date.now(),
-      user: user || 'Anonymous',
+      user: user || "Anonymous",
       rating,
       comment,
-      date: new Date().toISOString().split('T')[0]
+      date: new Date().toISOString().split("T")[0],
     });
-    
+
     setRating(0);
-    setComment('');
-    setUser('');
+    setComment("");
+    setUser("");
   };
 
   return (
@@ -274,7 +287,9 @@ const ReviewForm = ({ product, onSubmit }) => {
           required
         />
       </div>
-      <button type="submit" className="submit-review-btn">Submit Review</button>
+      <button type="submit" className="submit-review-btn">
+        Submit Review
+      </button>
     </form>
   );
 };
@@ -283,40 +298,43 @@ const ReviewForm = ({ product, onSubmit }) => {
 const SimilarProducts = ({ product, products, onProductClick }) => {
   // Find products with the same name but different ID (variations)
   const similarProducts = products.filter(
-    p => p.name === product.name && p.id !== product.id
+    (p) => p.name === product.name && p.id !== product.id
   );
-  
+
   // If no same-name products, find products in same category
-  const categoryProducts = similarProducts.length === 0 
-    ? products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4)
-    : [];
-  
+  const categoryProducts =
+    similarProducts.length === 0
+      ? products.filter(
+          (p) => p.category === product.category && p.id !== product.id
+        ).slice(0, 4)
+      : [];
+
   const productsToShow = similarProducts.length > 0 ? similarProducts : categoryProducts;
-  
+
   if (productsToShow.length === 0) return null;
 
   return (
     <div className="similar-products">
-      <h3>{similarProducts.length > 0 ? 'product related to this item' : 'Similar Products'}</h3>
+      <h3>{similarProducts.length > 0 ? "product related to this item" : "Similar Products"}</h3>
       <div className="similar-products-grid">
-        {productsToShow.map(product => (
-          <div 
-            key={product.id} 
+        {productsToShow.map((p) => (
+          <div
+            key={p.id}
             className="similar-product-card"
-            onClick={() => onProductClick(product)}
+            onClick={() => onProductClick(p)}
           >
-            <img src={product.image} alt={product.name} />
+            <img src={p.image} alt={p.name} />
             <div className="similar-product-info">
-              <p className="similar-product-name">{product.name}</p>
-              <p className="similar-product-color">{product.color}</p>
+              <p className="similar-product-name">{p.name}</p>
+              <p className="similar-product-color">{p.color}</p>
               <div className="similar-product-price">
-                {product.originalPrice ? (
+                {p.originalPrice ? (
                   <>
-                    <span className="original-price">{formatPrice(product.originalPrice)}</span>
-                    <span className="sale-price">{formatPrice(product.price)}</span>
+                    <span className="original-price">{formatPrice(p.originalPrice)}</span>
+                    <span className="sale-price">{formatPrice(p.price)}</span>
                   </>
                 ) : (
-                  <span className="price">{formatPrice(product.price)}</span>
+                  <span className="price">{formatPrice(p.price)}</span>
                 )}
               </div>
             </div>
@@ -328,21 +346,32 @@ const SimilarProducts = ({ product, products, onProductClick }) => {
 };
 
 // Product Details Modal Component
-const ProductDetailsModal = ({ product, isOpen, onClose, onAddReview, products, onProductClick }) => {
-  const [activeTab, setActiveTab] = useState('description');
+const ProductDetailsModal = ({
+  product,
+  isOpen,
+  onClose,
+  onAddReview,
+  products,
+  onProductClick,
+}) => {
+  const [activeTab, setActiveTab] = useState("description");
   const [showReviewForm, setShowReviewForm] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen || !product) return null;
 
-  const averageRating = product.reviews.length > 0 
-    ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length 
-    : 0;
+  const averageRating =
+    product.reviews.length > 0
+      ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
+        product.reviews.length
+      : 0;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
-        
+        <button className="modal-close" onClick={onClose}>
+          &times;
+        </button>
+
         <div className="modal-body">
           <div className="product-image-container">
             <img src={product.image} alt={product.name} className="product-image" />
@@ -352,11 +381,11 @@ const ProductDetailsModal = ({ product, isOpen, onClose, onAddReview, products, 
               </div>
             )}
           </div>
-          
+
           <div className="product-details">
             <h2>{product.name}</h2>
             {product.color && <p className="product-color">Color: {product.color}</p>}
-            
+
             <div className="price-container">
               {product.originalPrice ? (
                 <>
@@ -367,31 +396,35 @@ const ProductDetailsModal = ({ product, isOpen, onClose, onAddReview, products, 
                 <span className="price">{formatPrice(product.price)}</span>
               )}
             </div>
-            
+
             <div className="rating-summary">
               <StarRating rating={Math.round(averageRating)} size="large" />
               <span>({product.reviews.length} reviews)</span>
             </div>
-            
+
             <div className="tabs">
-              <button 
-                className={activeTab === 'description' ? 'active' : ''}
-                onClick={() => setActiveTab('description')}
+              <button
+                className={activeTab === "description" ? "active" : ""}
+                onClick={() => setActiveTab("description")}
               >
                 Description
               </button>
-              <button 
-                className={activeTab === 'reviews' ? 'active' : ''}
-                onClick={() => setActiveTab('reviews')}
+              <button
+                className={activeTab === "reviews" ? "active" : ""}
+                onClick={() => setActiveTab("reviews")}
               >
                 Reviews ({product.reviews.length})
               </button>
             </div>
-            
+
             <div className="tab-content">
-              {activeTab === 'description' && (
+              {activeTab === "description" && (
                 <div className="product-description">
-                  <p>This beautiful {product.name.toLowerCase()} is made from high-quality materials and designed for comfort and style. Perfect for various occasions.</p>
+                  <p>
+                    This beautiful {product.name.toLowerCase()} is made from
+                    high-quality materials and designed for comfort and style.
+                    Perfect for various occasions.
+                  </p>
                   <ul>
                     <li>Premium quality fabric/materials</li>
                     <li>Comfortable fit</li>
@@ -401,14 +434,15 @@ const ProductDetailsModal = ({ product, isOpen, onClose, onAddReview, products, 
                   </ul>
                 </div>
               )}
-              
-              {activeTab === 'reviews' && (
+              {activeTab === "reviews" && (
                 <div className="reviews-section">
                   {product.reviews.length === 0 ? (
-                    <p className="no-reviews">No reviews yet. Be the first to review this product!</p>
+                    <p className="no-reviews">
+                      No reviews yet. Be the first to review this product!
+                    </p>
                   ) : (
                     <div className="reviews-list">
-                      {product.reviews.map(review => (
+                      {product.reviews.map((review) => (
                         <div key={review.id} className="review-item">
                           <div className="review-header">
                             <span className="reviewer">{review.user}</span>
@@ -420,31 +454,30 @@ const ProductDetailsModal = ({ product, isOpen, onClose, onAddReview, products, 
                       ))}
                     </div>
                   )}
-                  
+
                   {!showReviewForm ? (
-                    <button 
+                    <button
                       className="add-review-btn"
                       onClick={() => setShowReviewForm(true)}
                     >
                       Write a Review
                     </button>
                   ) : (
-                    <ReviewForm 
-                      product={product} 
+                    <ReviewForm
+                      product={product}
                       onSubmit={(review) => {
                         onAddReview(product.id, review);
                         setShowReviewForm(false);
-                      }} 
+                      }}
                     />
                   )}
                 </div>
               )}
             </div>
-            
-            {/* Similar Products Section */}
-            <SimilarProducts 
-              product={product} 
-              products={products} 
+
+            <SimilarProducts
+              product={product}
+              products={products}
               onProductClick={onProductClick}
             />
           </div>
@@ -458,19 +491,19 @@ const ProductDetailsModal = ({ product, isOpen, onClose, onAddReview, products, 
 const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    address: ''
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    address: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -492,10 +525,12 @@ const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content auth-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
-        
-        <h2>{isLoginMode ? 'Login' : 'Create Account'}</h2>
-        
+        <button className="modal-close" onClick={onClose}>
+          &times;
+        </button>
+
+        <h2>{isLoginMode ? "Login" : "Create Account"}</h2>
+
         <form onSubmit={handleSubmit} className="auth-form">
           {!isLoginMode && (
             <div className="form-group">
@@ -509,7 +544,7 @@ const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
               />
             </div>
           )}
-          
+
           <div className="form-group">
             <label>Email</label>
             <input
@@ -520,7 +555,7 @@ const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
               required
             />
           </div>
-          
+
           {!isLoginMode && (
             <>
               <div className="form-group">
@@ -532,7 +567,7 @@ const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
                   onChange={handleChange}
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Address</label>
                 <textarea
@@ -544,7 +579,7 @@ const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
               </div>
             </>
           )}
-          
+
           <div className="form-group">
             <label>Password</label>
             <input
@@ -555,7 +590,7 @@ const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
               required
             />
           </div>
-          
+
           {!isLoginMode && (
             <div className="form-group">
               <label>Confirm Password</label>
@@ -568,20 +603,20 @@ const AuthModal = ({ isOpen, onClose, onLogin, onSignup }) => {
               />
             </div>
           )}
-          
+
           <button type="submit" className="auth-submit-btn">
-            {isLoginMode ? 'Login' : 'Create Account'}
+            {isLoginMode ? "Login" : "Create Account"}
           </button>
         </form>
-        
+
         <div className="auth-switch">
           {isLoginMode ? "Don't have an account? " : "Already have an account? "}
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="switch-mode-btn"
             onClick={() => setIsLoginMode(!isLoginMode)}
           >
-            {isLoginMode ? 'Sign up' : 'Login'}
+            {isLoginMode ? "Sign up" : "Login"}
           </button>
         </div>
       </div>
@@ -597,14 +632,14 @@ export default function App() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState(CHECKOUT_STEPS.CART);
   const [contactInfo, setContactInfo] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    zip: ''
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    zip: "",
   });
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeCategory, setActiveCategory] = useState("all");
   const [selectedSizes, setSelectedSizes] = useState({});
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [products, setProducts] = useState(PRODUCTS);
@@ -612,78 +647,69 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
   const handleSizeSelection = (productId, size) => {
-    setSelectedSizes(prev => ({
+    setSelectedSizes((prev) => ({
       ...prev,
-      [productId]: size
+      [productId]: size,
     }));
   };
 
   const handleAddToCart = (product) => {
-    // Check if user is logged in
     if (!currentUser) {
       setIsAuthModalOpen(true);
       return;
     }
-    
+
     const selectedSize = selectedSizes[product.id];
-    
-    // Don't add to cart if no size is selected
+
     if (!selectedSize) {
       alert(`Please select a size for ${product.name}`);
       return;
     }
-    
-    // Check if selected size is in stock
+
     if (product.stock[selectedSize] <= 0) {
       alert(`Sorry, the selected size is out of stock for ${product.name}`);
       return;
     }
-    
-    setCart(prevCart => {
+
+    setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(
-        item => item.id === product.id && item.size === selectedSize
+        (item) => item.id === product.id && item.size === selectedSize
       );
-      
+
       if (existingProductIndex !== -1) {
-        // If same product with same size exists, increase quantity
         const updatedCart = [...prevCart];
         updatedCart[existingProductIndex] = {
           ...updatedCart[existingProductIndex],
-          quantity: updatedCart[existingProductIndex].quantity + 1
+          quantity: updatedCart[existingProductIndex].quantity + 1,
         };
         return updatedCart;
       }
-      
-      // Add new product with selected size
-      return [...prevCart, { 
-        ...product, 
-        quantity: 1, 
-        size: selectedSize 
-      }];
+
+      return [...prevCart, { ...product, quantity: 1, size: selectedSize }];
     });
     setIsCartOpen(true);
   };
 
   const handleRemoveFromCart = (productId, size) => {
-    setCart(prevCart => {
+    setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(
-        item => item.id === productId && item.size === size
+        (item) => item.id === productId && item.size === size
       );
-      
+
       if (existingProductIndex !== -1) {
         const existingProduct = prevCart[existingProductIndex];
-        
+
         if (existingProduct.quantity > 1) {
-          // Decrease quantity if more than 1
           const updatedCart = [...prevCart];
           updatedCart[existingProductIndex] = {
             ...existingProduct,
-            quantity: existingProduct.quantity - 1
+            quantity: existingProduct.quantity - 1,
           };
           return updatedCart;
         } else {
-          // Remove item completely if quantity is 1
-          return prevCart.filter(item => !(item.id === productId && item.size === size));
+          return prevCart.filter(
+            (item) => !(item.id === productId && item.size === size)
+          );
         }
       }
       return prevCart;
@@ -691,17 +717,18 @@ export default function App() {
   };
 
   const toggleWishlist = (product) => {
-    // Check if user is logged in
     if (!currentUser) {
       setIsAuthModalOpen(true);
       return;
     }
-    
-    setWishlist(prevWishlist => {
-      const isProductInWishlist = prevWishlist.some(item => item.id === product.id);
-      
+
+    setWishlist((prevWishlist) => {
+      const isProductInWishlist = prevWishlist.some(
+        (item) => item.id === product.id
+      );
+
       if (isProductInWishlist) {
-        return prevWishlist.filter(item => item.id !== product.id);
+        return prevWishlist.filter((item) => item.id !== product.id);
       } else {
         return [...prevWishlist, product];
       }
@@ -709,34 +736,30 @@ export default function App() {
   };
 
   const moveToCart = (product) => {
-    // First remove from wishlist
-    setWishlist(prev => prev.filter(item => item.id !== product.id));
-    
-    // Then add to cart (will prompt for size selection)
+    setWishlist((prev) => prev.filter((item) => item.id !== product.id));
+
     const selectedSize = selectedSizes[product.id];
     if (selectedSize) {
       handleAddToCart(product);
     } else {
-      // If no size selected, open the cart and prompt for size
       setIsCartOpen(true);
       alert(`Please select a size for ${product.name}`);
     }
   };
 
   const handleCheckout = () => {
-    // Check if user is logged in
     if (!currentUser) {
       setIsAuthModalOpen(true);
       return;
     }
-    
+
     if (cart.length === 0) return;
     setCheckoutStep(CHECKOUT_STEPS.SHIPPING);
   };
 
   const handleContactChange = (e) => {
     const { name, value } = e.target;
-    setContactInfo(prev => ({ ...prev, [name]: value }));
+    setContactInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmitShipping = (e) => {
@@ -757,9 +780,9 @@ export default function App() {
   };
 
   const handleAddReview = (productId, review) => {
-    setProducts(prevProducts => 
-      prevProducts.map(product => 
-        product.id === productId 
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId
           ? { ...product, reviews: [...product.reviews, review] }
           : product
       )
@@ -768,57 +791,61 @@ export default function App() {
 
   const handleSimilarProductClick = (product) => {
     setSelectedProduct(product);
-    // Scroll to top of modal when switching products
-    const modalContent = document.querySelector('.modal-content');
+    const modalContent = document.querySelector(".modal-content");
     if (modalContent) {
       modalContent.scrollTop = 0;
     }
   };
 
   const handleLogin = (email, password) => {
-    // In a real app, this would be an API call
-    // For demo purposes, we'll just set a mock user
     setCurrentUser({
-      name: 'Demo User',
-      email: email
+      name: "Demo User",
+      email: email,
     });
     setIsAuthModalOpen(false);
-    alert('Login successful!');
+    alert("Login successful!");
   };
 
   const handleSignup = (userData) => {
-    // In a real app, this would be an API call
-    // For demo purposes, we'll just set a mock user
     setCurrentUser({
       name: userData.name,
       email: userData.email,
       phone: userData.phone,
-      address: userData.address
+      address: userData.address,
     });
     setIsAuthModalOpen(false);
-    alert('Account created successfully!');
+    alert("Account created successfully!");
   };
 
   const handleLogout = () => {
     setCurrentUser(null);
     setCart([]);
     setWishlist([]);
-    alert('You have been logged out.');
+    alert("You have been logged out.");
   };
 
   const cartTotalItems = cart.reduce((total, item) => total + item.quantity, 0);
-  const cartTotalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  const cartOriginalPrice = cart.reduce((total, item) => total + (item.originalPrice || item.price) * item.quantity, 0);
+  const cartTotalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+  const cartOriginalPrice = cart.reduce(
+    (total, item) => total + (item.originalPrice || item.price) * item.quantity,
+    0
+  );
 
   // Filter products by category
-  const filteredProducts = activeCategory === 'all' 
-    ? products 
-    : products.filter(product => product.category === activeCategory);
+  const filteredProducts =
+    activeCategory === "all"
+      ? products
+      : products.filter((product) => product.category === activeCategory);
 
   return (
     <div className="app-container">
       <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap');
+        /* Your full CSS from your original file including header, grid, modals, etc. */
+        /* For brevity, please insert your full CSS here exactly as you have it */
+ @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap');
 
         :root {
             --primary-color: #0b0101ff;
@@ -845,6 +872,7 @@ export default function App() {
         }
         /* Header */
         .header {
+        
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1763,35 +1791,103 @@ export default function App() {
             padding-top: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
+        /* Mobile Responsive CSS (add at bottom of your CSS) */
+        @media screen and (max-width: 768px) {
+          .header {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem 1.5rem;
+          }
+          .nav-links {
+            flex-direction: column;
+            width: 100%;
+            margin-top: 1rem;
+          }
+          .nav-links li {
+            margin-left: 0;
+            margin-bottom: 0.75rem;
+          }
+          .container {
+            padding: 0 1rem;
+          }
+          .product-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          .product-image {
+            height: 200px;
+          }
+          .modal-content,
+          .cart-sidebar,
+          .wishlist-sidebar {
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 0 !important;
+            height: 90vh !important;
+            padding: 1rem !important;
+          }
+          .size-options {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+          .page-title {
+            font-size: 1.8rem;
+          }
+          .add-to-cart-btn {
+            font-size: 1rem;
+            padding: 0.5rem;
+          }
+          .header-icons {
+            gap: 1rem;
+            font-size: 1.2rem;
+          }
+        }
       `}</style>
 
-      {/* Header Component */}
+      {/* Header */}
       <header className="header">
-        <div className="logo">D&J Boutique</div>
+        <div className="logo">D&amp;J Boutique</div>
         <nav>
           <ul className="nav-links">
-            <li><a href="#dresses" onClick={() => setActiveCategory('dresses')}>Dresses</a></li>
-            <li><a href="#shoes" onClick={() => setActiveCategory('shoes')}>Shoes</a></li>
-            <li><a href="#new-arrivals" onClick={() => setActiveCategory('all')}>New Arrivals</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li>
+              <a href="#dresses" onClick={() => setActiveCategory("dresses")}>
+                Dresses
+              </a>
+            </li>
+            <li>
+              <a href="#shoes" onClick={() => setActiveCategory("shoes")}>
+                Shoes
+              </a>
+            </li>
+            <li>
+              <a href="#new-arrivals" onClick={() => setActiveCategory("all")}>
+                New Arrivals
+              </a>
+            </li>
+            <li>
+              <a href="#contact">Contact</a>
+            </li>
           </ul>
         </nav>
         <div className="header-icons">
           {currentUser ? (
             <div className="user-container user-menu">
-              <div>👤 {currentUser.name}</div>
+              <div>{currentUser.name}</div>
               <div className="user-dropdown">
                 <button onClick={handleLogout}>Logout</button>
               </div>
             </div>
           ) : (
             <div className="user-container" onClick={() => setIsAuthModalOpen(true)}>
-              👤 Login
+              Login
             </div>
           )}
           <div className="wishlist-container" onClick={() => setIsWishlistOpen(true)}>
             ❤️
-            {wishlist.length > 0 && <span className="wishlist-count">{wishlist.length}</span>}
+            {wishlist.length > 0 && (
+              <span className="wishlist-count">{wishlist.length}</span>
+            )}
           </div>
           <div className="cart-container" onClick={() => setIsCartOpen(true)}>
             🛒
@@ -1803,62 +1899,61 @@ export default function App() {
       {/* Main Product Grid */}
       <main className="container">
         <h1 className="page-title">Featured Collection</h1>
-        
-        {/* Category Filter */}
+
         <div className="category-filter">
-          <button 
-            className={`category-btn ${activeCategory === 'all' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('all')}
+          <button
+            className={`category-btn ${activeCategory === "all" ? "active" : ""}`}
+            onClick={() => setActiveCategory("all")}
           >
             All Products
           </button>
-          <button 
-            className={`category-btn ${activeCategory === 'dresses' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('dresses')}
+          <button
+            className={`category-btn ${activeCategory === "dresses" ? "active" : ""}`}
+            onClick={() => setActiveCategory("dresses")}
           >
             Dresses
           </button>
-          <button 
-            className={`category-btn ${activeCategory === 'shoes' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('shoes')}
+          <button
+            className={`category-btn ${activeCategory === "shoes" ? "active" : ""}`}
+            onClick={() => setActiveCategory("shoes")}
           >
             Shoes
           </button>
         </div>
-        
+
         <div className="product-grid">
-          {filteredProducts.map(product => {
-            const isInWishlist = wishlist.some(item => item.id === product.id);
-            const averageRating = product.reviews.length > 0 
-              ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length 
-              : 0;
-            
+          {filteredProducts.map((product) => {
+            const isInWishlist = wishlist.some((item) => item.id === product.id);
+            const averageRating =
+              product.reviews.length > 0
+                ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
+                  product.reviews.length
+                : 0;
+
             return (
               <div className="product-card" key={product.id}>
                 <div className="product-image-container">
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="product-image" 
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="product-image"
                     onClick={() => openProductDetails(product)}
                   />
-                  <button 
-                    className={`wishlist-btn ${isInWishlist ? 'active' : ''}`}
+                  <button
+                    className={`wishlist-btn ${isInWishlist ? "active" : ""}`}
                     onClick={() => toggleWishlist(product)}
                   >
-                    {isInWishlist ? '❤️' : '🤍'}
+                    {isInWishlist ? "❤️" : "🤍"}
                   </button>
-                  
-                  {/* Stock Badge - Show if any size is low or out of stock */}
-                  {Object.values(product.stock).some(stock => stock === 0) && (
+
+                  {Object.values(product.stock).some((stock) => stock === 0) && (
                     <div className="stock-badge out-of-stock">Out of Stock</div>
                   )}
-                  {!Object.values(product.stock).some(stock => stock === 0) && 
-                   Object.values(product.stock).some(stock => stock < 3) && (
-                    <div className="stock-badge low-stock">Low Stock</div>
-                  )}
-                  
-                  {/* Discount Badge */}
+                  {!Object.values(product.stock).some((stock) => stock === 0) &&
+                    Object.values(product.stock).some((stock) => stock < 3) && (
+                      <div className="stock-badge low-stock">Low Stock</div>
+                    )}
+
                   {product.originalPrice && (
                     <div className="discount-badge">
                       {calculateDiscount(product.originalPrice, product.price)}% OFF
@@ -1866,48 +1961,58 @@ export default function App() {
                   )}
                 </div>
                 <div className="product-info">
-                  <h3 className="product-name" onClick={() => openProductDetails(product)}>
+                  <h3
+                    className="product-name"
+                    onClick={() => openProductDetails(product)}
+                  >
                     {product.name}
                   </h3>
-                  {product.color && <p className="product-color">{product.color}</p>}
-                  
+                  {product.color && (
+                    <p className="product-color">{product.color}</p>
+                  )}
+
                   <div className="price-container">
                     {product.originalPrice ? (
                       <>
-                        <span className="original-price">{formatPrice(product.originalPrice)}</span>
+                        <span className="original-price">
+                          {formatPrice(product.originalPrice)}
+                        </span>
                         <span className="sale-price">{formatPrice(product.price)}</span>
                       </>
                     ) : (
                       <span className="price">{formatPrice(product.price)}</span>
                     )}
                   </div>
-                  
+
                   {product.reviews.length > 0 && (
                     <div className="product-rating">
                       <StarRating rating={Math.round(averageRating)} />
                       <span className="review-count">({product.reviews.length})</span>
                     </div>
                   )}
-                  
-                  {/* Size Selection */}
+
                   <div className="size-selection">
                     <p>Select Size:</p>
                     <div className="size-options">
-                      {product.sizes.map(size => {
+                      {product.sizes.map((size) => {
                         const stock = product.stock[size];
-                        let sizeClass = '';
+                        let sizeClass = "";
                         if (stock === 0) {
-                          sizeClass = 'out-of-stock';
+                          sizeClass = "out-of-stock";
                         } else if (stock < 3) {
-                          sizeClass = 'low-stock';
+                          sizeClass = "low-stock";
                         }
-                        
+
                         return (
                           <div
                             key={size}
-                            className={`size-option ${sizeClass} ${selectedSizes[product.id] === size ? 'selected' : ''}`}
-                            onClick={() => stock > 0 && handleSizeSelection(product.id, size)}
-                            title={stock === 0 ? 'Out of stock' : stock < 3 ? 'Low stock' : ''}
+                            className={`size-option ${sizeClass} ${
+                              selectedSizes[product.id] === size ? "selected" : ""
+                            }`}
+                            onClick={() =>
+                              stock > 0 && handleSizeSelection(product.id, size)
+                            }
+                            title={stock === 0 ? "Out of stock" : stock < 3 ? "Low stock" : ""}
                           >
                             {size}
                           </div>
@@ -1916,18 +2021,20 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                <button 
-                  className="add-to-cart-btn" 
+                <button
+                  className="add-to-cart-btn"
                   onClick={() => handleAddToCart(product)}
-                  disabled={Object.values(product.stock).every(stock => stock === 0)}
+                  disabled={Object.values(product.stock).every((stock) => stock === 0)}
                 >
-                  {Object.values(product.stock).every(stock => stock === 0) ? 'Out of Stock' : 'Add to Cart'}
+                  {Object.values(product.stock).every((stock) => stock === 0)
+                    ? "Out of Stock"
+                    : "Add to Cart"}
                 </button>
               </div>
             );
           })}
         </div>
-        
+
         {/* Contact Section */}
         <section id="contact" className="contact-section">
           <h2 className="section-title">Contact Us</h2>
@@ -1950,14 +2057,20 @@ export default function App() {
             <div className="contact-card">
               <div className="contact-icon">🕒</div>
               <h3>Hours</h3>
-              <p>Mon-Fri: 9AM-6PM<br/>Sat: 10AM-4PM<br/>Sun: Closed</p>
+              <p>
+                Mon-Fri: 9AM-6PM
+                <br />
+                Sat: 10AM-4PM
+                <br />
+                Sun: Closed
+              </p>
             </div>
           </div>
         </section>
       </main>
 
       {/* Authentication Modal */}
-      <AuthModal 
+      <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onLogin={handleLogin}
@@ -1965,51 +2078,65 @@ export default function App() {
       />
 
       {/* Product Details Modal */}
-      <ProductDetailsModal 
-        product={selectedProduct} 
-        isOpen={!!selectedProduct} 
+      <ProductDetailsModal
+        product={selectedProduct}
+        isOpen={!!selectedProduct}
         onClose={closeProductDetails}
         onAddReview={handleAddReview}
         products={products}
         onProductClick={handleSimilarProductClick}
       />
 
-      {/* Cart Sidebar & Checkout Process */}
+      {/* Cart Sidebar & Checkout */}
       {isCartOpen && (
         <div className="cart-overlay">
           <div className="cart-sidebar">
             <div className="cart-header">
               <h2>
-                {checkoutStep === CHECKOUT_STEPS.CART && 'Your Cart'}
-                {checkoutStep === CHECKOUT_STEPS.SHIPPING && 'Shipping Information'}
-                {checkoutStep === CHECKOUT_STEPS.PAYMENT && 'Payment Method'}
-                {checkoutStep === CHECKOUT_STEPS.CONFIRMATION && 'Order Confirmation'}
+                {checkoutStep === CHECKOUT_STEPS.CART && "Your Cart"}
+                {checkoutStep === CHECKOUT_STEPS.SHIPPING && "Shipping Information"}
+                {checkoutStep === CHECKOUT_STEPS.PAYMENT && "Payment Method"}
+                {checkoutStep === CHECKOUT_STEPS.CONFIRMATION && "Order Confirmation"}
               </h2>
-              <button onClick={() => {
-                if (checkoutStep === CHECKOUT_STEPS.CART) {
-                  setIsCartOpen(false);
-                } else {
-                  setCheckoutStep(CHECKOUT_STEPS.CART);
-                }
-              }}>&times;</button>
+              <button
+                onClick={() => {
+                  if (checkoutStep === CHECKOUT_STEPS.CART) {
+                    setIsCartOpen(false);
+                  } else {
+                    setCheckoutStep(CHECKOUT_STEPS.CART);
+                  }
+                }}
+              >
+                &times;
+              </button>
             </div>
-            
+
             {checkoutStep === CHECKOUT_STEPS.CART && (
               <>
                 <div className="cart-items">
                   {cart.length === 0 ? (
                     <p>Your cart is empty.</p>
                   ) : (
-                    cart.map(item => (
+                    cart.map((item) => (
                       <div key={`${item.id}-${item.size}`} className="cart-item">
-                        <img src={item.image} alt={item.name} className="cart-item-image" />
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="cart-item-image"
+                        />
                         <div className="cart-item-info">
                           <p className="cart-item-name">{item.name}</p>
                           <div className="cart-item-details">
                             <span className="cart-item-price">
                               {item.originalPrice ? (
                                 <>
-                                  <span style={{textDecoration: 'line-through', marginRight: '0.5rem', color: '#A9A9A9'}}>
+                                  <span
+                                    style={{
+                                      textDecoration: "line-through",
+                                      marginRight: "0.5rem",
+                                      color: "#A9A9A9",
+                                    }}
+                                  >
                                     {formatPrice(item.originalPrice)}
                                   </span>
                                   {formatPrice(item.price)}
@@ -2021,24 +2148,31 @@ export default function App() {
                             <span className="cart-item-size">Size: {item.size}</span>
                           </div>
                           <div className="cart-item-quantity">
-                            <button 
-                              className="quantity-btn" 
+                            <button
+                              className="quantity-btn"
                               onClick={() => handleRemoveFromCart(item.id, item.size)}
                             >
                               -
                             </button>
                             <span className="quantity-value">{item.quantity}</span>
-                            <button 
-                              className="quantity-btn" 
+                            <button
+                              className="quantity-btn"
                               onClick={() => handleAddToCart(item)}
                             >
                               +
                             </button>
-                            <button 
+                            <button
                               className="remove-btn"
-                              onClick={() => setCart(cart.filter(cartItem => 
-                                !(cartItem.id === item.id && cartItem.size === item.size)
-                              ))}
+                              onClick={() =>
+                                setCart(
+                                  cart.filter(
+                                    (cartItem) =>
+                                      !(
+                                        cartItem.id === item.id && cartItem.size === item.size
+                                      )
+                                  )
+                                )
+                              }
                             >
                               Remove
                             </button>
@@ -2057,13 +2191,15 @@ export default function App() {
                       </div>
                       <div className="price-row">
                         <span>Discount:</span>
-                        <span className="discount-amount">-{formatPrice(cartOriginalPrice - cartTotalPrice)}</span>
+                        <span className="discount-amount">
+                          -{formatPrice(cartOriginalPrice - cartTotalPrice)}
+                        </span>
                       </div>
                     </div>
                   )}
                   <p className="cart-total">Total: {formatPrice(cartTotalPrice)}</p>
-                  <button 
-                    className="checkout-btn" 
+                  <button
+                    className="checkout-btn"
                     onClick={handleCheckout}
                     disabled={cart.length === 0}
                   >
@@ -2072,7 +2208,7 @@ export default function App() {
                 </div>
               </>
             )}
-            
+
             {checkoutStep === CHECKOUT_STEPS.SHIPPING && (
               <form className="checkout-form" onSubmit={handleSubmitShipping}>
                 <h3 className="form-title">Shipping Information</h3>
@@ -2149,7 +2285,7 @@ export default function App() {
                 </button>
               </form>
             )}
-            
+
             {checkoutStep === CHECKOUT_STEPS.PAYMENT && (
               <div className="checkout-form">
                 <h3 className="form-title">Payment Method</h3>
@@ -2159,12 +2295,17 @@ export default function App() {
                   <div className="payment-option">Apple Pay</div>
                   <div className="payment-option">Google Pay</div>
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="cardNumber">Card Number</label>
-                  <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required />
+                  <input
+                    type="text"
+                    id="cardNumber"
+                    placeholder="1234 5678 9012 3456"
+                    required
+                  />
                 </div>
-                
+
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="expiry">Expiry Date</label>
@@ -2175,13 +2316,13 @@ export default function App() {
                     <input type="text" id="cvv" placeholder="123" required />
                   </div>
                 </div>
-                
+
                 <button className="checkout-btn" onClick={handlePayment}>
                   Pay {formatPrice(cartTotalPrice)}
                 </button>
               </div>
             )}
-            
+
             {checkoutStep === CHECKOUT_STEPS.CONFIRMATION && (
               <div className="confirmation">
                 <div className="confirmation-icon">✅</div>
@@ -2189,15 +2330,15 @@ export default function App() {
                 <p>Your order has been confirmed and will be shipped within 2-3 business days.</p>
                 <p>Order #: {Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
                 <p>You saved {formatPrice(cartOriginalPrice - cartTotalPrice)} on this order!</p>
-                <button 
-                  className="checkout-btn" 
+                <button
+                  className="checkout-btn"
                   onClick={() => {
                     setIsCartOpen(false);
                     setCheckoutStep(CHECKOUT_STEPS.CART);
                     setCart([]);
                     setSelectedSizes({});
                   }}
-                  style={{marginTop: '2rem'}}
+                  style={{ marginTop: "2rem" }}
                 >
                   Continue Shopping
                 </button>
@@ -2215,7 +2356,7 @@ export default function App() {
               <h2>Your Wishlist</h2>
               <button onClick={() => setIsWishlistOpen(false)}>&times;</button>
             </div>
-            
+
             <div className="wishlist-items">
               {wishlist.length === 0 ? (
                 <div className="empty-wishlist">
@@ -2223,9 +2364,13 @@ export default function App() {
                   <p>Add items you love by clicking the heart icon!</p>
                 </div>
               ) : (
-                wishlist.map(item => (
+                wishlist.map((item) => (
                   <div key={item.id} className="wishlist-item">
-                    <img src={item.image} alt={item.name} className="wishlist-item-image" />
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="wishlist-item-image"
+                    />
                     <div className="wishlist-item-info">
                       <p className="wishlist-item-name">{item.name}</p>
                       <div className="price-container">
@@ -2239,13 +2384,13 @@ export default function App() {
                         )}
                       </div>
                       <div className="wishlist-item-actions">
-                        <button 
+                        <button
                           className="move-to-cart-btn"
                           onClick={() => moveToCart(item)}
                         >
                           Move to Cart
                         </button>
-                        <button 
+                        <button
                           className="remove-btn"
                           onClick={() => toggleWishlist(item)}
                         >
@@ -2257,10 +2402,10 @@ export default function App() {
                 ))
               )}
             </div>
-            
+
             <div className="wishlist-footer">
-              <button 
-                className="checkout-btn" 
+              <button
+                className="checkout-btn"
                 onClick={() => setIsWishlistOpen(false)}
               >
                 Continue Shopping
@@ -2269,32 +2414,46 @@ export default function App() {
           </div>
         </div>
       )}
-      
+
       {/* Footer */}
       <footer>
         <div className="footer-content">
           <div className="footer-section">
-            <h3>D&J Boutique</h3>
+            <h3>D&amp;J Boutique</h3>
             <p>Your one-stop shop for fashionable dresses and shoes for every occasion.</p>
           </div>
           <div className="footer-section">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="#dresses" onClick={() => setActiveCategory('dresses')}>Dresses</a></li>
-              <li><a href="#shoes" onClick={() => setActiveCategory('shoes')}>Shoes</a></li>
-              <li><a href="#new-arrivals" onClick={() => setActiveCategory('all')}>New Arrivals</a></li>
-              <li><a href="#contact">Contact Us</a></li>
+              <li>
+                <a href="#dresses" onClick={() => setActiveCategory("dresses")}>
+                  Dresses
+                </a>
+              </li>
+              <li>
+                <a href="#shoes" onClick={() => setActiveCategory("shoes")}>
+                  Shoes
+                </a>
+              </li>
+              <li>
+                <a href="#new-arrivals" onClick={() => setActiveCategory("all")}>
+                  New Arrivals
+                </a>
+              </li>
+              <li>
+                <a href="#contact">Contact Us</a>
+              </li>
             </ul>
           </div>
           <div className="footer-section">
             <h3>Contact Info</h3>
-            <p>📧 support@d&Jboutique.com</p>
+            <p>📧 support@d&jboutique.com</p>
             <p>📞 +91 6458938385</p>
             <p>📍 123 Fashion Avenue, Coimbatore, 645341</p>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2025 D&J Boutique. All rights reserved.</p>
+          <p>© 2025 D&amp;J Boutique. All rights reserved.</p>
         </div>
       </footer>
     </div>
